@@ -1,7 +1,7 @@
 use serde::Deserialize;
 use serde_aux::field_attributes::deserialize_number_from_string;
-use sqlx::ConnectOptions;
 use sqlx::postgres::{PgConnectOptions, PgSslMode};
+use sqlx::ConnectOptions;
 
 #[derive(Deserialize)]
 pub struct Settings {
@@ -34,7 +34,7 @@ pub fn get_configurations() -> Result<Settings, config::ConfigError> {
         .expect("Failed to parse APP_ENVIRONMENT");
 
     settings.merge(
-        config::File::from(configuration_directory.join(environment.as_str())).required(true)
+        config::File::from(configuration_directory.join(environment.as_str())).required(true),
     )?;
 
     settings.merge(config::Environment::with_prefix("app").separator("__"))?;
@@ -94,7 +94,7 @@ impl TryFrom<String> for Environment {
             other => Err(format!(
                 "{} is not a supported environment. Use either `local` or `production`",
                 other,
-            ))
+            )),
         }
     }
 }
